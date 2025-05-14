@@ -10,19 +10,33 @@
 //create an instance of bluetooth seial
 BluetoothSerial SerialBT;
 
+#define ignition 2
+#define starter 4
+
+
 
 void setup() {
 Serial.begin(115200);
 SerialBT.begin("ESP32 Bluetooth");
 Serial.println("The device started, now you can pair it with bluetooth!");
+
+pinMode(ignition,OUTPUT);
+pinMode(starter,OUTPUT);
+
 }
 
 void loop() {
-  if (Serial.available()){
-    SerialBT.write(Serial.read());
-  }
+
   if (SerialBT.available()) {
-    Serial.write(SerialBT.read());
+    char data=SerialBT.read();
+    Serial.write(SerialBT.read()); // this is for the serial monitor 
+
+    if(data=='W' ){
+      digitalWrite(ignition,HIGH);
+    }
+    else if(data=='w'){
+      digitalWrite(ignition,LOW);
+    }
   }
-  delay(20);
+  delay(1);
 }
