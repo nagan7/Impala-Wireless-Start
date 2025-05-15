@@ -10,8 +10,8 @@
 //create an instance of bluetooth seial
 BluetoothSerial SerialBT;
 
-#define ignition 2
-#define starter 4
+#define ignition 4
+#define starter 2
 
 
 
@@ -29,14 +29,49 @@ void loop() {
 
   if (SerialBT.available()) {
     char data=SerialBT.read();
-    Serial.write(SerialBT.read()); // this is for the serial monitor 
+    
 
-    if(data=='W' ){
-      digitalWrite(ignition,HIGH);
+    if(data>=32 && data<=126){
+      Serial.write(data); // this is for the serial monitor 
     }
-    else if(data=='w'){
-      digitalWrite(ignition,LOW);
+
+    switch(data){
+      case 'W':
+        digitalWrite(ignition,HIGH);
+        break;
+
+      case 'w':
+        digitalWrite(ignition,LOW);
+        break;
+ 
+      case 'F':
+        digitalWrite(starter,HIGH);
+        delay(500);
+        digitalWrite(starter,LOW);
+        delay(1000);
+        break;
+
+        case 'B':
+        digitalWrite(starter,HIGH);
+        delay(700);
+        digitalWrite(starter,LOW);
+        delay(1000);
+        break;
+
+        case 'L':
+        digitalWrite(starter,HIGH);
+        delay(900);
+        digitalWrite(starter,LOW);
+        delay(1000);
+        break;
+
+        case 'R':
+        digitalWrite(starter,HIGH);
+        delay(1100);
+        digitalWrite(starter,LOW);
+        delay(1000);
+        break;
     }
   }
-  delay(1);
+  delay(2);
 }
