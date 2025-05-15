@@ -14,6 +14,11 @@ BluetoothSerial SerialBT;
 #define starter 2
 #define safety 23
 
+unsigned long last_start=0;
+const unsigned long cooldown=2000;
+
+void triggerStarter(unsigned int duration);
+
 
 void setup() {
 Serial.begin(115200);
@@ -58,41 +63,36 @@ void loop() {
         break;
  
       case 'F':
-        if(digitalRead(safety)==LOW){
-          digitalWrite(starter,HIGH);
-          delay(500);
-          digitalWrite(starter,LOW);
-          delay(1000);
-        }
+        triggerStarter(700);
         break;
 
         case 'B':
-        if(digitalRead(safety)==LOW){
-        digitalWrite(starter,HIGH);
-        delay(700);
-        digitalWrite(starter,LOW);
-        delay(1000);
-        }
+        triggerStarter(900);
         break;
 
         case 'L':
-        if(digitalRead(safety)==LOW){
-        digitalWrite(starter,HIGH);
-        delay(900);
-        digitalWrite(starter,LOW);
-        delay(1000);
-        }
+        triggerStarter(1100);
         break;
 
         case 'R':
-        if(digitalRead(safety)==LOW){
-        digitalWrite(starter,HIGH);
-        delay(1100);
-        digitalWrite(starter,LOW);
-        delay(1000);
-        }
+        triggerStarter(1300);
         break;
     }
   }
   delay(2);
+}
+
+
+
+void triggerStarter(unsigned int duration){
+  if(digitalRead(safety)==LOW){
+    unsigned long current_time=millis();
+    if(current_time-last_start>=cooldown){
+        digitalWrite(starter,HIGH);
+        delay(duration);
+        digitalWrite(starter,LOW);
+        last_start=millis();
+        delay(1000);
+    }
+  }
 }
