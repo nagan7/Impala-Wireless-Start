@@ -10,8 +10,8 @@
 //create an instance of bluetooth seial
 BluetoothSerial SerialBT;
 
-#define ignition 13
-#define starter 2
+#define ignition 12
+#define starter 13
 #define safety 23
 
 unsigned long last_start=0;
